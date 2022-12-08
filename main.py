@@ -14,15 +14,39 @@ user_two = {
 }
 
 login = ''
-password = ''
 logged_in_user =''
 other_user = ''
+
+def password_confirm(user):
+    password = ''
+    while password != user['password']:
+        password = input('Please enter your password. ')
+        if password == user['password']:
+            print("")
+            print(f"Successful login your current balance is {user['account_balance']}.")    
+            print(f"Your available connected accounts funds are:")
+            balance_check(user)
+            break     
+        else:
+            print("Incorrect password")
 
 def balance_check(user):
     for bank, balance in user['connected_banks']:
             print(bank, balance)
 
-
+def transfer_function(user):
+    transfer = input(f"Would you like to make a transfer to {other_user['full_name']}? (Y or N) ")
+    if transfer == "N":
+        print(f"Have a nice day {user['full_name']} good bye.")
+    elif transfer == "Y":
+        transfer_amount = float(input("How much would you like to tranfer?"))
+        while transfer_amount > user['account_balance']:
+            print("")
+            print("There are not enough funds for that amount.")
+            transfer_amount = float(input("Please input new amount."))
+        user['account_balance'] -= transfer_amount
+        other_user['account_balance'] += transfer_amount
+        print(f"Transfer complete your updated balance is {user['account_balance']}")
 
 
 while login != user_one['username'] or user_two['username']:
@@ -40,27 +64,26 @@ while login != user_one['username'] or user_two['username']:
         print("Invalid username")  
 
 print (f"Welcome {logged_in_user['full_name']}")
-while password != logged_in_user['password']:
-    password = input('Please enter your password. ')
-    if password == logged_in_user['password']:
-        print("")
-        print(f"Successful login your current balance is {logged_in_user['account_balance']}.")    
-        print(f"Your available connected accounts funds are:")
-        balance_check(logged_in_user)
-        break     
-    else:
-        print("Incorrect password")
 
-transfer = input(f"Would you like to make a transfer to {other_user['full_name']}? (Y or N) ")
-if transfer == "N":
-    print(f"Have a nice day {logged_in_user['full_name']} good bye.")
-elif transfer == "Y":
+password_confirm(logged_in_user)
+
+transfer_function(logged_in_user)
+
+repeat_transfer = input(f"Would you like to make another transfer to {other_user['full_name']} (Y or N)")
+if repeat_transfer == "Y":
     transfer_amount = float(input("How much would you like to tranfer?"))
     while transfer_amount > logged_in_user['account_balance']:
         print("")
-        print("There are not not enough funds for that amount")
+        print("There are not enough funds for that amount.")
         transfer_amount = float(input("Please input new amount."))
     logged_in_user['account_balance'] -= transfer_amount
     other_user['account_balance'] += transfer_amount
-    print(f"Transfer complete your updated balance is {logged_in_user['account_balance']}")
+    print(f"Transfer complete your updated balance is {logged_in_user['account_balance']}") 
+
+elif repeat_transfer == "N":
+    print(f"Your balance is {logged_in_user['account_balance']}. Have a nice day.")
+
+
+
+
 
