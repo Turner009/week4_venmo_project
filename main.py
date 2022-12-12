@@ -31,7 +31,7 @@ def password_confirm(user):
 
 def balance_check(user):
     for bank, balance in user['connected_banks']:
-            print(bank, balance)
+            print(f"{bank}: {balance}")
 
 def funds_from_bank(user):
     select_bank = int(input(f"You can transfer funds from a bank account to complete transaction, which bank would you like to use? 0 for {(user['connected_banks'][0][0])} OR 1 for {(user['connected_banks'][1][0])}  "))
