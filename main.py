@@ -13,9 +13,7 @@ user_two = {
     'connected_banks': [('Chase', 1000.00),('Acme Savings Club', 2500.00)]
 }
 
-login = ''
-logged_in_user =''
-other_user = ''
+
 
 
 def password_confirm(user):
@@ -36,16 +34,16 @@ def balance_check(user):
             print(bank, balance)
 
 def funds_from_bank(user):
-        from_bank = input(f"Would like to transfer funds from a bank account?")
-        if from_bank == "Y":
-            balance_check(user)
-            choose_bank = {user['connected_banks'][input('Which bank would you like to use?')]}
-            amount = input("How much would you like to tranfer?")
-            user[choose_bank] -= amount
-        elif from_bank == "N":
-            pass
+    select_bank = int(input(f"You can transfer funds from a bank account to complete transaction, which bank would you like to use? 0 for {(user['connected_banks'][0][0])} OR 1 for {(user['connected_banks'][1][0])}  "))
+    withdrawal = float(input("How much would you like to withdraw?"))
+    list_bank = list(user['connected_banks'][select_bank])
+    user['account_balance'] += withdrawal ; list_bank[1] -= withdrawal
+    list_bank = tuple(list_bank)
+    user['connected_banks'][select_bank] = list_bank
 
-            
+    print(f"Your new balance is {user['account_balance']}")
+    print(f"Your updated balance is {user['connected_banks'][select_bank][0]} {user['connected_banks'][select_bank][1]}")
+
 
 
 
@@ -59,7 +57,7 @@ def transfer_function(user):
             print("")
             print("There are not enough funds for that amount.")
             funds_from_bank(logged_in_user)
-            transfer_amount = float(input("Please input new amount."))
+            transfer_amount = float(input(f"Please input new amount to transfer to {other_user['full_name']}."))
         user['account_balance'] -= transfer_amount
         other_user['account_balance'] += transfer_amount
         print(f"Transfer complete your updated balance is {user['account_balance']}")
@@ -70,7 +68,7 @@ def transfer_function(user):
                 print("")
                 print("There are not enough funds for that amount.")
                 funds_from_bank(logged_in_user)
-                transfer_amount = float(input("Please input new transfer amount."))
+                transfer_amount = float(input(f"Please input new amount to transfer to {other_user['full_name']}."))
             logged_in_user['account_balance'] -= transfer_amount
             other_user['account_balance'] += transfer_amount
             print(f"Transfer complete your updated balance is {logged_in_user['account_balance']}") 
@@ -79,22 +77,30 @@ def transfer_function(user):
 
 
 
+def login_function():
+    login = ''
+    while login != user_one['username'] or user_two['username']:
+        login = input('Enter your username please.')
+        global logged_in_user
+        global other_user
+        
+        if login == user_one['username']:
+            logged_in_user = user_one
+            other_user = user_two
+            print (f"Welcome {logged_in_user['full_name']}")
+            break
+        elif login == user_two['username']:
+            logged_in_user = user_two
+            other_user = user_one
+            print (f"Welcome {logged_in_user['full_name']}")
+            break
+        else:
+            print("")
+            print("Invalid username")
 
-while login != user_one['username'] or user_two['username']:
-    login = input('Enter your username please.')
-    if login == user_one['username']:
-        logged_in_user = user_one
-        other_user = user_two
-        break
-    elif login == user_two['username']:
-        logged_in_user = user_two
-        other_user = user_one
-        break
-    else:
-        print("")
-        print("Invalid username")  
+    
 
-print (f"Welcome {logged_in_user['full_name']}")
+login_function()
 
 password_confirm(logged_in_user)
 
