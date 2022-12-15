@@ -53,23 +53,10 @@ def transfer_function(user):
     if transfer == "N":
         print(f"Have a nice day {user['full_name']} good bye.")
     elif transfer == "Y":
-        transfer_amount = float(input("How much would you like to tranfer?"))
-        while transfer_amount > user['account_balance']:
-            print("")
-            print("There are not enough funds for that amount.")
-            bank_transfer = input("Would you like to transfer funds from a bank account? (Y or N)")
-            if bank_transfer == "Y":
-                funds_from_bank(logged_in_user)
-            elif bank_transfer == "N":    
-                transfer_amount = float(input(f"Please input new amount to transfer to {other_user['full_name']}."))
-        user['account_balance'] -= transfer_amount
-        other_user['account_balance'] += transfer_amount
-        print("")
-        print(f"Transfer complete your updated balance is ${user['account_balance']}")
-        repeat_transfer = input(f"Would you like to make another transfer to {other_user['full_name']} (Y or N)")
-        if repeat_transfer == "Y":
+        repeat_transfer = "Y"
+        while repeat_transfer == "Y":
             transfer_amount = float(input("How much would you like to tranfer?"))
-            while transfer_amount > logged_in_user['account_balance']:
+            while transfer_amount > user['account_balance']:
                 print("")
                 print("There are not enough funds for that amount.")
                 bank_transfer = input("Would you like to transfer funds from a bank account? (Y or N)")
@@ -77,9 +64,13 @@ def transfer_function(user):
                     funds_from_bank(logged_in_user)
                 elif bank_transfer == "N":    
                     transfer_amount = float(input(f"Please input new amount to transfer to {other_user['full_name']}."))
-            logged_in_user['account_balance'] -= transfer_amount
+            user['account_balance'] -= transfer_amount
             other_user['account_balance'] += transfer_amount
-            print(f"Transfer complete your updated balance is ${logged_in_user['account_balance']}") 
+            print("")
+            print(f"Transfer of ${transfer_amount} to {other_user['full_name']} is complete your updated balance is ${user['account_balance']}")
+            repeat_transfer = input(f"Would you like to make another transfer to {other_user['full_name']} (Y or N)")
+        if repeat_transfer == "Y":
+            transfer_function(user)
         elif repeat_transfer == "N":
             print(f"Your balance is ${logged_in_user['account_balance']}. Have a nice day.")
 
